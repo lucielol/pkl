@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -13,9 +15,15 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
 
-export function profile() {
+type profileProps = {
+  icons?: React.ReactNode;
+};
+
+export function profile({ icons }: profileProps) {
   return (
     <div className="flex gap-3">
       <div className="flex items-center">
@@ -29,20 +37,25 @@ export function profile() {
           className="rounded-full"
         />
       </div>
-      <div>
+      <div className="leading-tight">
         <p className="font-bold">Thimoty</p>
         <p>Support</p>
       </div>
+      <div className="flex items-center">{icons}</div>
     </div>
   );
 }
 
 export function NavbarProfile() {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
-    <DropdownMenu>
+    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
-        <Button className="bg-transparent text-black dark:text-white">
-          {profile()}
+        <Button className="bg-transparent hover:bg-blue-500 text-black dark:text-white">
+          {isOpen === false
+            ? profile({ icons: <ChevronDown /> })
+            : profile({ icons: <ChevronUp /> })}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="start">

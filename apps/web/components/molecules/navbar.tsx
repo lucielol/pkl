@@ -4,7 +4,7 @@ import { InputSearch, ModeToggle, NavbarProfile } from "@/components/molecules";
 
 export function Navbar() {
   const baseClassButton =
-    "bg-transparent text-black dark:text-white hover:bg-blue-500";
+    "bg-transparent text-black dark:text-white hover:bg-blue-500 cursor-pointer";
   return (
     <div className="flex py-5 justify-between w-full px-3">
       <InputSearch />

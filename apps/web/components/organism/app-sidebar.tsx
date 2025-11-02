@@ -1,22 +1,16 @@
+import { Sidebar } from "@repo/ui/components/sidebar";
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarHeader,
-} from "@repo/ui/components/sidebar";
+  AppSidebarContent,
+  AppSidebarFooter,
+  AppSidebarHeader,
+} from "@/components/molecules";
 
 export function AppSidebar() {
   return (
     <Sidebar>
-      <SidebarHeader className="flex justify-center items-center pt-5">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup />
-        <SidebarGroup />
-      </SidebarContent>
-      <SidebarFooter />
+      <AppSidebarHeader />
+      <AppSidebarContent />
+      <AppSidebarFooter />
     </Sidebar>
   );
 }

@@ -4,9 +4,9 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "@workspace/ui/*": ["./src/*"],
+      "@workspace/ui/*": ["./src/*"]
       // "@workspace/ui/*": ["../../packages/ui/src/*"],
-      "@/*": ["./src/*"]
+      // "@/*": ["./src/*"]
     }
   },
   "include": ["src", "**/*.ts", "**/*.tsx"],
