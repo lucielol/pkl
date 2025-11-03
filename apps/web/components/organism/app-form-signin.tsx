@@ -27,14 +27,17 @@ import {
   InputGroupText,
 } from "@repo/ui/components/input-group";
 import { Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
 import Link from "next/link";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
 
 export function AppFormSignIn() {
-  const [showPassword, setShowPassword] = useState(false);
+  const { login, loading } = useAuth();
   const router = useRouter();
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<formSignInSchema>({
     resolver: zodResolver(signInSchema),
@@ -45,11 +48,21 @@ export function AppFormSignIn() {
     },
   });
 
-  function onSubmit(data: formSignInSchema) {
-    toast.success("Berhasil login");
-    console.log("berhasil: ", data);
-    router.push("/");
-  }
+  const onSubmit = async (credentials: formSignInSchema) => {
+    try {
+      const response = await login(credentials);
+
+      if (!response.success) {
+        toast.error(response.message);
+        return;
+      }
+
+      toast.success("Berhasil login");
+      router.push("/");
+    } catch (error) {
+      toast.error("Email atau password salah");
+    }
+  };
 
   return (
     <Card className="bg-transparent border-0 shadow-none">
