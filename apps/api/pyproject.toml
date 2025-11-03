@@ -1,0 +1,6 @@
+[tool.ruff.format]
+indent-style = "tab"
+quote-style = "double"
+skip-magic-trailing-comma = false
+docstring-code-format = true
+line-ending = "lf"
