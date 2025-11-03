@@ -12,11 +12,15 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@repo/ui/components/sidebar";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import { ChevronDown, ChevronUp, User2 } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
 
 export function AppSidebarFooter() {
   const [isOpen, setIsOpen] = useState(false);
+  const { user, loading, logout } = useAuth();
+
   return (
     <SidebarFooter>
       <SidebarMenu>
@@ -24,8 +28,13 @@ export function AppSidebarFooter() {
           <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton className="flex justify-between">
-                <div className="flex items-center gap-3">
-                  <User2 /> <span>Username</span>
+                <div className="flex items-center gap-3 truncate">
+                  <User2 />{" "}
+                  {loading ? (
+                    <Skeleton className="h-4 w-[150px]" />
+                  ) : (
+                    user?.fullname
+                  )}
                 </div>
                 <div className="flex flex-col">
                   {isOpen === true ? (
@@ -52,7 +61,7 @@ export function AppSidebarFooter() {
                 <span>Billing</span>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <span>Sign out</span>
+                <span onClick={logout}>Sign out</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

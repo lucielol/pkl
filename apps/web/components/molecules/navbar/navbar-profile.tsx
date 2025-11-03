@@ -15,15 +15,19 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@repo/ui/components/dropdown-menu";
+import { Skeleton } from "@repo/ui/components/skeleton";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
 
 type profileProps = {
   icons?: React.ReactNode;
 };
 
 export function profile({ icons }: profileProps) {
+  const { user, loading, logout } = useAuth();
+
   return (
     <div className="flex gap-3">
       <div className="flex items-center">
@@ -37,9 +41,10 @@ export function profile({ icons }: profileProps) {
           className="rounded-full"
         />
       </div>
-      <div className="leading-tight">
-        <p className="font-bold">Thimoty</p>
-        <p>Support</p>
+      <div className="leading-tight flex items-center max-w-[150px]">
+        <div className="font-bold truncate">
+          {loading ? <Skeleton className="h-4 w-[100px]" /> : user?.fullname}
+        </div>
       </div>
       <div className="flex items-center">{icons}</div>
     </div>
@@ -47,6 +52,7 @@ export function profile({ icons }: profileProps) {
 }
 
 export function NavbarProfile() {
+  const { logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -102,7 +108,7 @@ export function NavbarProfile() {
         <DropdownMenuItem>Support</DropdownMenuItem>
         <DropdownMenuItem disabled>API</DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={logout}>
           Log out
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>
