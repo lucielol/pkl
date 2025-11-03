@@ -39,7 +39,6 @@ yarn-error.log*
 
 # API
 apps/api/venv/
-apps/api/__pycache__/
 /models/model_rehab.pkl
 /models/model_rehab.joblib
 apps/api/.env

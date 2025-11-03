@@ -1,0 +1,6 @@
+/.ruff_cache
+/__pycache__
+/routes/__pycache__/
+/controllers/__pycache__/
+/core/__pycache__/
+
