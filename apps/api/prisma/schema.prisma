@@ -15,15 +15,15 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@map("users")
+  Account   Account?  @relation("UserAccount")
 
-  Account Account[]
+  @@map("users")
 }
 
 model Account {
   id        Int      @id @default(autoincrement())
-  userId    Int      @map("user_id")
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int      @unique @map("user_id")
+  user      User     @relation("UserAccount", fields: [userId], references: [id], onDelete: Cascade)
   fullname  String
   phone     String
   address   String?
@@ -32,3 +32,4 @@ model Account {
 
   @@map("accounts")
 }
+
