@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@repo/ui/components/card";
-import { formSignInSchema, formSignUpSchema, signUpSchema } from "@/validator";
+import { formSignUpSchema, signUpSchema } from "@/validator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Field,
@@ -26,11 +26,16 @@ import {
   InputGroupButton,
   InputGroupText,
 } from "@repo/ui/components/input-group";
+import { Spinner } from "@repo/ui/components/spinner";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import { useRegister } from "@/hooks/use-register";
+import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 
 export function AppFormSignUp() {
+  const { register, loading, error, success, message } = useRegister();
+  const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useRouter();
@@ -38,18 +43,39 @@ export function AppFormSignUp() {
   const form = useForm<formSignUpSchema>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
-      username: "",
+      fullname: "",
+      phone: "",
       email: "",
       password: "",
+      address: "",
       confirmPassword: "",
     },
   });
 
-  function onSubmit(data: formSignInSchema) {
-    toast.success("Berhasil login");
-    console.log("berhasil: ", data);
-    router.push("/sign-in");
-  }
+  const onSubmit = async (data: formSignUpSchema) => {
+    try {
+      await register(data);
+      if (!success) {
+        toast.error(message);
+        return;
+      }
+
+      const responseLogin = await login({
+        email: data.email,
+        password: data.password,
+      });
+
+      if (!responseLogin.success) {
+        toast.error(responseLogin.message);
+        return;
+      }
+
+      toast.success(message);
+      router.push("/");
+    } catch (error) {
+      toast.error("Register gagal, periksa kembali data");
+    }
+  };
 
   return (
     <Card className="bg-transparent border-0 shadow-none">
@@ -61,17 +87,49 @@ export function AppFormSignUp() {
         <form id="form-signin" onSubmit={form.handleSubmit(onSubmit)}>
           <FieldGroup className="gap-5">
             <Controller
-              name="username"
+              name="fullname"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-value={fieldState.invalid}>
-                  <FieldLabel htmlFor="username">Username</FieldLabel>
+                  <FieldLabel htmlFor="fullName">Nama Lengkap</FieldLabel>
                   <Input
                     {...field}
                     type="text"
-                    id="username"
+                    id="fullName"
                     aria-invalid={fieldState.invalid}
-                    placeholder="Jhon Doe"
+                    placeholder="John Doe"
+                    autoComplete="on"
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+            <Controller
+              name="phone"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-value={fieldState.invalid}>
+                  <FieldLabel htmlFor="phone">Nomor Telepon</FieldLabel>
+                  <Input
+                    {...field}
+                    type="tel"
+                    id="phone"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    onChange={(e) => {
+                      const digitsOnly = e.target.value.replace(/\D+/g, "");
+                      field.onChange(digitsOnly);
+                    }}
+                    onBeforeInput={(e) => {
+                      const data = (e as unknown as InputEvent).data;
+                      if (data && /\D/.test(data)) {
+                        e.preventDefault();
+                      }
+                    }}
+                    aria-invalid={fieldState.invalid}
+                    placeholder="081234567890"
                     autoComplete="on"
                   />
                   {fieldState.invalid && (
@@ -177,12 +235,15 @@ export function AppFormSignUp() {
       </CardContent>
       <CardFooter>
         <Field>
-          <Button type="submit" form="form-signin">
-            Sign Up
+          <Button type="submit" form="form-signin" disabled={loading}>
+            {loading ? (
+              <>
+                <Spinner /> Loading...
+              </>
+            ) : (
+              "Sign Up"
+            )}
           </Button>
-          {/* <div>
-            <p>By clicking on Sign In</p>
-          </div> */}
         </Field>
       </CardFooter>
     </Card>
