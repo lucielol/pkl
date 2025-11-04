@@ -1,7 +1,9 @@
 import * as z from "zod";
 
 export const signInSchema = z.object({
-  email: z.string().email("Email tidak valid, coba lagi!"),
+  email: z
+    .email({ message: "Email tidak valid, coba lagi!" })
+    .min(1, { message: "Email tidak boleh kosong" }),
   password: z
     .string()
     .min(8, "Password minimal 8 karakter")
@@ -22,14 +24,16 @@ export const signInSchema = z.object({
 
 export const signUpSchema = z
   .object({
-    username: z
+    fullname: z.string().min(1, { message: "Nama tidak boleh kosong" }),
+    email: z
+      .email({ message: "Email tidak valid" })
+      .min(1, { message: "Email tidak boleh kosong" }),
+    phone: z
       .string()
-      .min(1, { message: "Username tidak boleh kosong" })
-      .transform((val) => val.toLowerCase())
-      .refine((val) => !/\s/.test(val), {
-        message: "Username tidak boleh mengandung spasi",
+      .min(10, { message: "Nomor telepon minimal 10 digit" })
+      .refine((val) => /^\d+$/.test(val), {
+        message: "Nomor telepon harus berupa angka",
       }),
-    email: z.string().email({ message: "Email tidak valid" }),
     password: z
       .string()
       .min(8, { message: "Password minimal 8 karakter" })
@@ -45,6 +49,7 @@ export const signUpSchema = z
       .refine((val) => /[^A-Za-z0-9]/.test(val), {
         message: "Password harus mengandung simbol (!@#$%, dll)",
       }),
+    address: z.string().optional(),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
