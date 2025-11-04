@@ -27,6 +27,7 @@ import {
   InputGroupText,
 } from "@repo/ui/components/input-group";
 import { Eye, EyeOff } from "lucide-react";
+import { Spinner } from "@repo/ui/components/spinner";
 import Link from "next/link";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import { useRouter } from "next/navigation";
@@ -166,12 +167,15 @@ export function AppFormSignIn() {
       </CardContent>
       <CardFooter>
         <Field>
-          <Button type="submit" form="form-signin">
-            Sign In
+          <Button type="submit" form="form-signin" disabled={loading}>
+            {loading ? (
+              <>
+                <Spinner /> Loading...
+              </>
+            ) : (
+              "Sign In"
+            )}
           </Button>
-          {/* <div>
-            <p>By clicking on Sign In</p>
-          </div> */}
         </Field>
       </CardFooter>
     </Card>
