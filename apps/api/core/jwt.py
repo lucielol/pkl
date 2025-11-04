@@ -1,17 +1,14 @@
-import os
 from typing import Optional
-from dotenv import load_dotenv
+from config.env import settings
 from datetime import datetime, timedelta, timezone
 from jose import jwt, JWTError
 from fastapi import HTTPException, status
 from jose.exceptions import ExpiredSignatureError, JWTClaimsError, JWTError
 
-load_dotenv()
-
-SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = os.getenv("ALGORITHM")
-ACCESS_TOKEN_EXPIRE = int(os.getenv("ACCESS_TOKEN_EXPIRE", 15))
-REFRESH_TOKEN_EXPIRE = int(os.getenv("REFRESH_TOKEN_EXPIRE", 60 * 24 * 7))
+SECRET_KEY = settings.SECRET_KEY
+ALGORITHM = settings.ALGORITHM
+ACCESS_TOKEN_EXPIRE = settings.ACCESS_TOKEN_EXPIRE
+REFRESH_TOKEN_EXPIRE = settings.REFRESH_TOKEN_EXPIRE
 
 
 def create_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
