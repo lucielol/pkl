@@ -65,7 +65,7 @@ export function useAuth() {
     Cookies.remove("access_token");
     setUser(null);
     delete api.defaults.headers.common["Authorization"];
-    router.push("/sign-in");
+    router.push("/");
   }, [router]);
 
   const fetchUser = useCallback(async () => {
