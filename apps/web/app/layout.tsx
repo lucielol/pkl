@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "@repo/ui/styles.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { AuthProvider } from "@/context/auth-context";
 import { Toaster } from "react-hot-toast";
 
 const geistSans = localFont({
@@ -54,7 +55,7 @@ export default function RootLayout({
               },
             }}
           />
-          {children}
+          <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>
       </body>
     </html>
