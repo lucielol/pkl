@@ -10,7 +10,7 @@ export function AppSidebar() {
     <Sidebar>
       <AppSidebarHeader />
       <AppSidebarContent />
-      <AppSidebarFooter />
+      {/* <AppSidebarFooter /> */}
     </Sidebar>
   );
 }
