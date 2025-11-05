@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuthContext } from "@/context/auth-context";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -19,14 +20,13 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
-import { useAuth } from "@/hooks/use-auth";
 
 type profileProps = {
   icons?: React.ReactNode;
 };
 
 export function profile({ icons }: profileProps) {
-  const { user, loading, logout } = useAuth();
+  const { user, loading, logout } = useAuthContext();
 
   return (
     <div className="flex gap-3">
@@ -52,7 +52,7 @@ export function profile({ icons }: profileProps) {
 }
 
 export function NavbarProfile() {
-  const { logout } = useAuth();
+  const { logout } = useAuthContext();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
