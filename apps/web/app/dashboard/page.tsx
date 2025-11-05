@@ -8,10 +8,6 @@ export default function Home() {
         <AppBreadcrumb
           items={[
             {
-              name: "Home",
-              href: "/",
-            },
-            {
               name: "Dashboard",
             },
           ]}
