@@ -1,9 +1,10 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useCallback } from "react";
-import api from "@/lib/axios";
+import { useEffect, useState, useCallback, useRef } from "react";
 import Cookies from "js-cookie";
+import { useApi } from "@/hooks/use-api";
+import { AxiosError } from "axios";
 
 export interface User {
   email: string;
@@ -15,20 +16,27 @@ export interface User {
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const { fetcher } = useApi();
   const router = useRouter();
+  const hasFetched = useRef(false);
 
   const login = useCallback(
     async (credentials: { email: string; password: string }) => {
       try {
         setLoading(true);
 
-        const response = await api.post("/auth/login", {
-          email: credentials.email,
-          password: credentials.password,
-        });
+        const response = await fetcher<{ access_token: string; user: User }>(
+          "/auth/login",
+          {
+            method: "POST",
+            data: {
+              email: credentials.email,
+              password: credentials.password,
+            },
+          }
+        );
 
-        const token = response.data?.access_token;
-
+        const token = response.access_token;
         Cookies.set("access_token", token, {
           secure:
             process.env.NODE_ENV === "production"
@@ -40,73 +48,60 @@ export function useAuth() {
           expires: 1,
         });
 
-        api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-        setUser({ email: response.data.user.email });
-
+        setUser(response.user);
         return { success: true, message: "Login berhasil" };
-      } catch (error: any) {
+      } catch (err) {
+        const error = err as AxiosError<any>;
         const message =
           error.response?.data?.detail ||
           error.response?.data?.message ||
           "Login gagal, periksa kembali email dan password";
-
-        return {
-          success: false,
-          message,
-        };
+        return { success: false, message };
       } finally {
         setLoading(false);
       }
     },
-    [router]
+    [fetcher]
   );
 
   const logout = useCallback(() => {
     Cookies.remove("access_token");
     setUser(null);
-    delete api.defaults.headers.common["Authorization"];
     router.push("/");
   }, [router]);
 
   const fetchUser = useCallback(async () => {
+    if (hasFetched.current) return;
+    hasFetched.current = true;
+
     try {
       setLoading(true);
-
       const token = Cookies.get("access_token");
-
       if (!token) {
         setUser(null);
         return;
       }
 
-      const authHeader = `Bearer ${token}`;
-
-      const response = await api.get("/auth/me", {
-        headers: {
-          Authorization: authHeader,
-        },
+      const data = await fetcher<User>("/auth/me", {
+        headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (response.data && response.data.email) {
-        setUser(response.data);
+      if (data && data.email) {
+        setUser(data);
       } else {
         setUser(null);
       }
-    } catch (err: any) {
+    } catch (err) {
+      console.warn("Fetch user gagal:", err);
       setUser(null);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [fetcher]);
 
   useEffect(() => {
     fetchUser();
-  }, [fetchUser]);
+  }, []);
 
-  return {
-    user,
-    loading,
-    login,
-    logout,
-  };
+  return { user, loading, login, logout };
 }
