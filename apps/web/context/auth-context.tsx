@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useContext } from "react";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/hooks";
 
 const AuthContext = createContext<ReturnType<typeof useAuth> | null>(null);
 

@@ -3,9 +3,9 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useCallback, useRef } from "react";
 import Cookies from "js-cookie";
-import { useApi } from "@/hooks/use-api";
+import { useApi } from "@/hooks";
 import { AxiosError } from "axios";
-import { env, isProduction } from "@/config/env.config";
+import { env, isProduction } from "@/config";
 import { STORAGE_KEYS } from "@/constants";
 import { User } from "@/types";
 

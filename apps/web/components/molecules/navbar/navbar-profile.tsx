@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuthContext } from "@/context/auth-context";
+import { useAuthContext } from "@/context";
 import { useDisclosure } from "@/hooks";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -22,7 +22,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/hooks";
 import { env } from "@/config";
 import { profileProps } from "@/types";
 
