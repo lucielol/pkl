@@ -1,28 +1,31 @@
 import { AlertDialogDemo } from "@/components/demo/alert-dialog-demo";
-import { AppBreadcrumb } from "@/components/molecules";
+import { AppBreadcrumb, ChartAreaInteractive } from "@/components/molecules";
 
 export default function Home() {
   return (
-    <>
-      <div className="py-5 px-4">
-        <AppBreadcrumb
-          items={[
-            {
-              name: "Dashboard",
-            },
-          ]}
-        />
-      </div>
-      <div className="flex justify-center items-center w-full h-screen">
-        <div className="text-center">
-          <h1 className="text-6xl mb-4">Hello World</h1>
-          <div className="flex gap-3 justify-center">
-            <AlertDialogDemo className="cursor-pointer">
-              Click here
-            </AlertDialogDemo>
-          </div>
+    <div className="space-y-6 px-4 py-5">
+      <AppBreadcrumb
+        items={[
+          {
+            name: "Dashboard",
+          },
+        ]}
+      />
+
+      <div className="grid gap-6 lg:grid-cols-[2fr_1fr]">
+        <ChartAreaInteractive />
+
+        <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-muted-foreground/40 bg-muted/10 p-6 text-center sm:p-10">
+          <h1 className="text-3xl font-semibold sm:text-4xl">Hello World</h1>
+          <p className="mt-3 text-sm text-muted-foreground sm:text-base">
+            Dashboard content goes here. Explore the chart or trigger the dialog
+            action.
+          </p>
+          <AlertDialogDemo className="mt-6 cursor-pointer">
+            Click here
+          </AlertDialogDemo>
         </div>
       </div>
-    </>
+    </div>
   );
 }
