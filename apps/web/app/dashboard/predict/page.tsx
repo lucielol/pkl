@@ -79,20 +79,18 @@ const invoices = [
 
 export default function Predict() {
   return (
-    <>
-      <div className="py-5 px-4">
-        <AppBreadcrumb
-          items={[
-            {
-              name: "Dashboard",
-              href: "/dashboard",
-            },
-            {
-              name: "Prediksi Rehabilitasi",
-            },
-          ]}
-        />
-      </div>
+    <div className="space-y-6 px-4 py-5">
+      <AppBreadcrumb
+        items={[
+          {
+            name: "Dashboard",
+            href: "/dashboard",
+          },
+          {
+            name: "Prediksi Rehabilitasi",
+          },
+        ]}
+      />
 
       <h1 className="text-3xl font-bold mb-4">Prediksi Rehabilitasi</h1>
 
@@ -171,6 +169,6 @@ export default function Predict() {
           </Pagination>
         </div>
       </div>
-    </>
+    </div>
   );
 }
