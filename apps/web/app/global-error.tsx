@@ -1,16 +1,10 @@
 "use client";
 
+import { ErrorProps } from "@/types";
 import { useEffect } from "react";
-
-// Tipe untuk props komponen Error
-type ErrorProps = {
-  error: Error & { digest?: string };
-  reset: () => void;
-};
 
 export default function Error({ error, reset }: ErrorProps) {
   useEffect(() => {
-    // Sebaiknya log error ini ke layanan monitoring seperti Sentry atau LogRocket
     console.error(error);
   }, [error]);
 
