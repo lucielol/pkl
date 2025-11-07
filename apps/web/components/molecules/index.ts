@@ -2,6 +2,7 @@ export * from "@/components/molecules/button-theme";
 export * from "@/components/molecules/navbar";
 export * from "@/components/molecules/input-search";
 export * from "@/components/molecules/app-breadcrumb";
+export * from "@/components/molecules/chart-area";
 
 // ============== dir navbar ==================
 export * from "@/components/molecules/navbar/navbar-profile";
