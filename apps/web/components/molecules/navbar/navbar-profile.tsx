@@ -19,11 +19,14 @@ import {
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 
 type profileProps = {
   icons?: React.ReactNode;
 };
+
+const urlApiDoc = `${process.env.NEXT_PUBLIC_API_URL}/docs`;
 
 export function profile({ icons }: profileProps) {
   const { user, loading, logout } = useAuthContext();
@@ -84,8 +87,8 @@ export function NavbarProfile() {
             <DropdownMenuShortcut>⌘K</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
+        {/* <DropdownMenuSeparator /> */}
+        {/* <DropdownMenuGroup>
           <DropdownMenuItem>Team</DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger>Invite users</DropdownMenuSubTrigger>
@@ -102,11 +105,15 @@ export function NavbarProfile() {
             New Team
             <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
           </DropdownMenuItem>
-        </DropdownMenuGroup>
+        </DropdownMenuGroup> */}
         <DropdownMenuSeparator />
-        <DropdownMenuItem>GitHub</DropdownMenuItem>
-        <DropdownMenuItem>Support</DropdownMenuItem>
-        <DropdownMenuItem disabled>API</DropdownMenuItem>
+        {/* <DropdownMenuItem>GitHub</DropdownMenuItem>
+        <DropdownMenuItem>Support</DropdownMenuItem> */}
+        <DropdownMenuItem>
+          <Link href={urlApiDoc} target="_blank">
+            API
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={logout}>
           Log out
