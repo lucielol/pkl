@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuthContext } from "@/context/auth-context";
+import { useDisclosure } from "@/hooks";
 import { Button } from "@repo/ui/components/button";
 import {
   DropdownMenu,
@@ -21,12 +22,11 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useAuth } from "@/hooks/use-auth";
+import { env } from "@/config";
+import { profileProps } from "@/types";
 
-type profileProps = {
-  icons?: React.ReactNode;
-};
-
-const urlApiDoc = `${process.env.NEXT_PUBLIC_API_URL}/docs`;
+const urlApiDoc = `${env.api.next_public_api_url}/docs`;
 
 export function profile({ icons }: profileProps) {
   const { user, loading, logout } = useAuthContext();
@@ -49,24 +49,44 @@ export function profile({ icons }: profileProps) {
           {loading ? <Skeleton className="h-4 w-[100px]" /> : user?.fullname}
         </div>
       </div>
-      <div className="flex items-center">{icons}</div>
+      <div className="md:flex items-center hidden">{icons}</div>
     </div>
   );
 }
 
 export function NavbarProfile() {
   const { logout } = useAuthContext();
-  const [isOpen, setIsOpen] = useState(false);
+  // const { logout } = useAuth();
+  const { isOpen, open, close } = useDisclosure();
 
   return (
-    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+    <DropdownMenu
+      open={isOpen}
+      onOpenChange={(setIsOpen) => (setIsOpen ? open() : close())}
+    >
       <DropdownMenuTrigger asChild>
-        <Button className="bg-transparent hover:bg-blue-500 text-black dark:text-white">
-          {isOpen === false
-            ? profile({ icons: <ChevronDown /> })
-            : profile({ icons: <ChevronUp /> })}
+        <Button
+          variant="ghost"
+          className="p-0 h-9 w-9 rounded-full overflow-hidden md:h-auto md:w-auto md:rounded-md md:px-2 cursor-pointer"
+        >
+          {/* mobile: avatar doang, md: seluruh profile */}
+          <span className="md:hidden block h-full w-full">
+            <Image
+              src="https://images.unsplash.com/photo-1655993810480-c15dccf9b3a0?auto=format&fit=crop&q=80&w=580"
+              alt="saya"
+              height={36}
+              width={36}
+              className="h-full w-full object-cover"
+            />
+          </span>
+          <span className="hidden md:block">
+            {isOpen
+              ? profile({ icons: <ChevronUp /> })
+              : profile({ icons: <ChevronDown /> })}
+          </span>
         </Button>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent className="w-56" align="start">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuGroup>
