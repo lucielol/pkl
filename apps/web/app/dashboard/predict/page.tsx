@@ -1,4 +1,4 @@
-import { AppBreadcrumb } from "@/components/molecules";
+import { AppBreadcrumb } from "@/components/organism";
 import {
   AlertDialog,
   AlertDialogAction,

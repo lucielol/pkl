@@ -1,5 +1,6 @@
 import { AlertDialogDemo } from "@/components/demo/alert-dialog-demo";
-import { AppBreadcrumb, ChartAreaInteractive } from "@/components/molecules";
+import { ChartAreaInteractive } from "@/components/molecules";
+import { AppBreadcrumb } from "@/components/organism";
 
 export default function Home() {
   return (
