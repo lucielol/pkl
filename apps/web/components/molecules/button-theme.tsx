@@ -38,8 +38,6 @@ export function ModeToggle() {
     return <Sun className={iconClass} />;
   };
 
-  console.log("tema:", theme);
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

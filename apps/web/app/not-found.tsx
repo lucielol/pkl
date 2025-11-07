@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 
 export default function NotFound() {
   const router = useRouter();
+
   return (
     <div className="flex h-screen flex-col items-center justify-center bg-gray-50 dark:bg-background text-center">
       <h1 className="text-6xl font-extrabold text-blue-600 mb-4">404</h1>
