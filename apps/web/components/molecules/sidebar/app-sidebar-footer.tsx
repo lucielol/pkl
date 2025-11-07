@@ -1,5 +1,6 @@
 "use client";
 
+import { useDisclosure } from "@/hooks";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,18 +15,20 @@ import {
 } from "@repo/ui/components/sidebar";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import { ChevronDown, ChevronUp, User2 } from "lucide-react";
-import { useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
 
 export function AppSidebarFooter() {
-  const [isOpen, setIsOpen] = useState(false);
+  const { isOpen, open, close } = useDisclosure();
   const { user, loading, logout } = useAuth();
 
   return (
     <SidebarFooter>
       <SidebarMenu>
         <SidebarMenuItem>
-          <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+          <DropdownMenu
+            open={isOpen}
+            onOpenChange={(setIsOpen) => (setIsOpen ? open() : close())}
+          >
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton className="flex justify-between">
                 <div className="flex items-center gap-3 truncate">
