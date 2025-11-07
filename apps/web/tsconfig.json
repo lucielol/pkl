@@ -20,7 +20,8 @@
     "../../packages/ui/src/**/*.ts",
     "../../packages/ui/src/**/*.tsx",
     ".next/types/**/*.ts",
-    "types/**/*.d.ts"
+    "types/**/*.d.ts",
+    "./*.ts"
   ],
   "exclude": ["node_modules", ".next", ".turbo"]
 }

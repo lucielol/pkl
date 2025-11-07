@@ -3,15 +3,11 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useCallback, useRef } from "react";
 import Cookies from "js-cookie";
-import { useApi } from "@/hooks/use-api";
+import { useApi } from "@/hooks";
 import { AxiosError } from "axios";
-
-export interface User {
-  email: string;
-  fullname?: string;
-  phone?: string;
-  address?: string;
-}
+import { env, isProduction } from "@/config";
+import { STORAGE_KEYS } from "@/constants";
+import { User } from "@/types";
 
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
@@ -37,13 +33,10 @@ export function useAuth() {
         );
 
         const token = response.access_token;
-        Cookies.set("access_token", token, {
-          secure:
-            process.env.NODE_ENV === "production"
-              ? process.env.COOKIE_SECURE === "true"
-              : false,
-          sameSite: (process.env.NODE_ENV === "production"
-            ? process.env.COOKIE_SAMESITE || "Strict"
+        Cookies.set(STORAGE_KEYS.token, token, {
+          secure: isProduction ? env.auth.cookie_secure === "true" : false,
+          sameSite: (isProduction
+            ? env.auth.cookie_samesite || "Strict"
             : "Lax") as "Strict" | "Lax" | "None",
           expires: 1,
         });
@@ -56,7 +49,11 @@ export function useAuth() {
           error.response?.data?.detail ||
           error.response?.data?.message ||
           "Login gagal, periksa kembali email dan password";
-        return { success: false, message };
+
+        return {
+          success: false,
+          message,
+        };
       } finally {
         setLoading(false);
       }
@@ -65,7 +62,7 @@ export function useAuth() {
   );
 
   const logout = useCallback(() => {
-    Cookies.remove("access_token");
+    Cookies.remove(STORAGE_KEYS.token);
     setUser(null);
     router.push("/");
   }, [router]);
@@ -76,7 +73,9 @@ export function useAuth() {
 
     try {
       setLoading(true);
-      const token = Cookies.get("access_token");
+
+      const token = Cookies.get(STORAGE_KEYS.token);
+
       if (!token) {
         setUser(null);
         return;

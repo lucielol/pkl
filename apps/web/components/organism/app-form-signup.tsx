@@ -27,11 +27,20 @@ import {
   InputGroupText,
 } from "@repo/ui/components/input-group";
 import { Spinner } from "@repo/ui/components/spinner";
-import { Eye, EyeOff } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  Key,
+  KeyRound,
+  Lock,
+  Mail,
+  Phone,
+  User,
+} from "lucide-react";
 import { useState } from "react";
-import { useRegister } from "@/hooks/use-register";
-import { useAuth } from "@/hooks/use-auth";
+import { useRegister, useAuth } from "@/hooks";
 import { useRouter } from "next/navigation";
+import { cn } from "@repo/ui/utils";
 
 export function AppFormSignUp() {
   const { register, loading, error, success, message } = useRegister();
@@ -77,6 +86,14 @@ export function AppFormSignUp() {
     }
   };
 
+  const baseClassInput =
+    "flex-1 border-0 focus-visible:ring-0 focus:outline-none bg-transparent px-3 py-2";
+  const baseClassInputGroup =
+    "flex items-center border rounded-md focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 overflow-hidden";
+  const baseClassInputGroupAddon =
+    "px-3 text-gray-500 flex items-center justify-center bg-transparent";
+  const baseClassIcon = "w-4 h-4";
+
   return (
     <Card className="bg-transparent border-0 shadow-none">
       <CardHeader className="text-center">
@@ -92,14 +109,20 @@ export function AppFormSignUp() {
               render={({ field, fieldState }) => (
                 <Field data-value={fieldState.invalid}>
                   <FieldLabel htmlFor="fullName">Nama Lengkap</FieldLabel>
-                  <Input
-                    {...field}
-                    type="text"
-                    id="fullName"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="John Doe"
-                    autoComplete="on"
-                  />
+                  <InputGroup className={baseClassInputGroup}>
+                    <Input
+                      {...field}
+                      type="text"
+                      id="fullName"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="John Doe"
+                      autoComplete="on"
+                      className={baseClassInput}
+                    />
+                    <InputGroupAddon className={baseClassInputGroupAddon}>
+                      <User className={baseClassIcon} />
+                    </InputGroupAddon>
+                  </InputGroup>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
@@ -112,26 +135,32 @@ export function AppFormSignUp() {
               render={({ field, fieldState }) => (
                 <Field data-value={fieldState.invalid}>
                   <FieldLabel htmlFor="phone">Nomor Telepon</FieldLabel>
-                  <Input
-                    {...field}
-                    type="tel"
-                    id="phone"
-                    inputMode="numeric"
-                    pattern="[0-9]*"
-                    onChange={(e) => {
-                      const digitsOnly = e.target.value.replace(/\D+/g, "");
-                      field.onChange(digitsOnly);
-                    }}
-                    onBeforeInput={(e) => {
-                      const data = (e as unknown as InputEvent).data;
-                      if (data && /\D/.test(data)) {
-                        e.preventDefault();
-                      }
-                    }}
-                    aria-invalid={fieldState.invalid}
-                    placeholder="081234567890"
-                    autoComplete="on"
-                  />
+                  <InputGroup className={baseClassInputGroup}>
+                    <Input
+                      {...field}
+                      type="tel"
+                      id="phone"
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      onChange={(e) => {
+                        const digitsOnly = e.target.value.replace(/\D+/g, "");
+                        field.onChange(digitsOnly);
+                      }}
+                      onBeforeInput={(e) => {
+                        const data = (e as unknown as InputEvent).data;
+                        if (data && /\D/.test(data)) {
+                          e.preventDefault();
+                        }
+                      }}
+                      aria-invalid={fieldState.invalid}
+                      placeholder="081234567890"
+                      autoComplete="on"
+                      className={baseClassInput}
+                    />
+                    <InputGroupAddon className={baseClassInputGroupAddon}>
+                      <Phone className={baseClassIcon} />
+                    </InputGroupAddon>
+                  </InputGroup>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
@@ -144,14 +173,20 @@ export function AppFormSignUp() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="email">Email</FieldLabel>
-                  <Input
-                    {...field}
-                    type="email"
-                    id="email"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="example@gmail.com"
-                    autoComplete="on"
-                  />
+                  <InputGroup className={baseClassInputGroup}>
+                    <Input
+                      {...field}
+                      type="email"
+                      id="email"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="example@gmail.com"
+                      autoComplete="on"
+                      className={baseClassInput}
+                    />
+                    <InputGroupAddon className={baseClassInputGroupAddon}>
+                      <Mail className={baseClassIcon} />
+                    </InputGroupAddon>
+                  </InputGroup>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
@@ -162,20 +197,42 @@ export function AppFormSignUp() {
               name="password"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field data-invalid={fieldState.invalid}>
+                <Field data-invalid={fieldState.invalid} className="group">
                   <FieldLabel htmlFor="password">Password</FieldLabel>
-                  <InputGroup>
+                  <InputGroup
+                    className={cn(
+                      "flex items-center rounded-md border bg-white dark:bg-sidebar overflow-hidden transition",
+                      // state fokus (wrapper aktif saat anak fokus)
+                      "focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/30",
+                      // state invalid dari Field (pakai data-attribute)
+                      "group-data-[invalid=true]:border-red-500 group-data-[invalid=true]:focus-within:ring-red-500/30 group-data-[invalid=true]:focus-within:border-red-500"
+                    )}
+                  >
+                    <InputGroupAddon
+                      align="inline-start"
+                      className={baseClassInputGroupAddon}
+                    >
+                      <Lock className="w-4 h-4" />
+                    </InputGroupAddon>
                     <Input
                       {...field}
                       type={showPassword ? "text" : "password"}
                       id="password"
                       placeholder="*************"
-                      className="border-0 focus:h-8"
+                      className="flex-1 border-0 bg-transparent px-3 py-2 focus:outline-none focus-visible:ring-0"
                       aria-invalid={fieldState.invalid}
                     />
                     <InputGroupAddon align={"inline-end"}>
                       <InputGroupButton
-                        className="tabular-nums hover:bg-transparent cursor-pointer"
+                        className={cn(
+                          "p-2 cursor-pointer outline-none hover:bg-transparent",
+                          // ikon ikut highlight saat wrapper fokus
+                          "group-focus-within:text-blue-600",
+                          // aksesibilitas fokus di tombol
+                          "focus-visible:ring-2 focus-visible:ring-blue-500/40 rounded-md",
+                          // invalid -> warna ikut merah saat fokus
+                          "group-data-[invalid=true]:group-focus-within:text-red-600 focus-visible:group-data-[invalid=true]:ring-red-500/40"
+                        )}
                         type="button"
                         form="form-signin"
                         onClick={() => setShowPassword((prev) => !prev)}
@@ -185,7 +242,7 @@ export function AppFormSignUp() {
                     </InputGroupAddon>
                   </InputGroup>
                   <InputGroupAddon align="block-end" className="p-0">
-                    <InputGroupText className="tabular-nums">
+                    <InputGroupText className="tabular-nums text-gray-500 group-data-[invalid=true]:text-red-600">
                       Min 8 karakter, A-z, angka, simbol
                     </InputGroupText>
                   </InputGroupAddon>
@@ -203,18 +260,35 @@ export function AppFormSignUp() {
                   <FieldLabel htmlFor="confirmPassword">
                     Konfirmasi Password
                   </FieldLabel>
-                  <InputGroup>
+                  <InputGroup
+                    className={cn(
+                      "flex items-center rounded-md border bg-white dark:bg-sidebar overflow-hidden transition",
+                      "focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/30",
+                      "group-data-[invalid=true]:border-red-500 group-data-[invalid=true]:focus-within:ring-red-500/30 group-data-[invalid=true]:focus-within:border-red-500"
+                    )}
+                  >
+                    <InputGroupAddon
+                      align="inline-start"
+                      className={baseClassInputGroupAddon}
+                    >
+                      <KeyRound className="w-4 h-4" />
+                    </InputGroupAddon>
                     <Input
                       {...field}
                       type={showConfirmPassword ? "text" : "password"}
                       id="confrimPassword"
                       placeholder="*************"
-                      className="border-0 focus:h-8"
+                      className="flex-1 border-0 bg-transparent px-3 py-2 focus:outline-none focus-visible:ring-0"
                       aria-invalid={fieldState.invalid}
                     />
                     <InputGroupAddon align={"inline-end"}>
                       <InputGroupButton
-                        className="tabular-nums hover:bg-transparent cursor-pointer"
+                        className={cn(
+                          "p-2 cursor-pointer outline-none hover:bg-transparent",
+                          "group-focus-within:text-blue-600",
+                          "focus-visible:ring-2 focus-visible:ring-blue-500/40 rounded-md",
+                          "group-data-[invalid=true]:group-focus-within:text-red-600 focus-visible:group-data-[invalid=true]:ring-red-500/40"
+                        )}
                         type="button"
                         form="form-signin"
                         onClick={() => setShowConfirmPassword((prev) => !prev)}

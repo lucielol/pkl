@@ -5,7 +5,7 @@ import {
   AppSidebarHeader,
 } from "@/components/molecules";
 
-export function AppSidebar() {
+export default function AppSidebar() {
   return (
     <Sidebar>
       <AppSidebarHeader />

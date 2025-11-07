@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { STORAGE_KEYS } from "@/constants";
 
 export function proxy(request: NextRequest) {
-  const token = request.cookies.get("access_token")?.value;
+  const token = request.cookies.get(STORAGE_KEYS.token)?.value;
   const pathname = request.nextUrl.pathname;
 
   const isAuthPage = pathname === "/";

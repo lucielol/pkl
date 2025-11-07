@@ -26,13 +26,14 @@ import {
   InputGroupButton,
   InputGroupText,
 } from "@repo/ui/components/input-group";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { Spinner } from "@repo/ui/components/spinner";
 import Link from "next/link";
 import { Checkbox } from "@repo/ui/components/checkbox";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth } from "@/hooks";
+import { cn } from "@repo/ui/utils";
 
 export function AppFormSignIn() {
   const { login, loading } = useAuth();
@@ -61,9 +62,18 @@ export function AppFormSignIn() {
       toast.success("Berhasil login");
       router.push("/");
     } catch (error) {
+      console.log("Error: ", error);
       toast.error("Email atau password salah");
     }
   };
+
+  const baseClassInput =
+    "flex-1 border-0 focus-visible:ring-0 focus:outline-none bg-transparent px-3 py-2";
+  const baseClassInputGroup =
+    "flex items-center border rounded-md focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 overflow-hidden";
+  const baseClassInputGroupAddon =
+    "px-3 text-gray-500 flex items-center justify-center bg-transparent";
+  const baseClassIcon = "w-4 h-4";
 
   return (
     <Card className="bg-transparent border-0 shadow-none">
@@ -82,14 +92,20 @@ export function AppFormSignIn() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="email">Email</FieldLabel>
-                  <Input
-                    {...field}
-                    type="email"
-                    id="email"
-                    aria-invalid={fieldState.invalid}
-                    placeholder="example@gmail.com"
-                    autoComplete="on"
-                  />
+                  <InputGroup className={baseClassInputGroup}>
+                    <Input
+                      {...field}
+                      type="email"
+                      id="email"
+                      aria-invalid={fieldState.invalid}
+                      placeholder="example@gmail.com"
+                      autoComplete="on"
+                      className={baseClassInput}
+                    />
+                    <InputGroupAddon className={baseClassInputGroupAddon}>
+                      <Mail className={baseClassIcon} />
+                    </InputGroupAddon>
+                  </InputGroup>
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
                   )}
@@ -102,18 +118,35 @@ export function AppFormSignIn() {
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="password">Password</FieldLabel>
-                  <InputGroup>
+                  <InputGroup
+                    className={cn(
+                      "flex items-center rounded-md border bg-white dark:bg-sidebar overflow-hidden transition",
+                      "focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/30",
+                      "group-data-[invalid=true]:border-red-500 group-data-[invalid=true]:focus-within:ring-red-500/30 group-data-[invalid=true]:focus-within:border-red-500"
+                    )}
+                  >
+                    <InputGroupAddon
+                      align="inline-start"
+                      className={baseClassInputGroupAddon}
+                    >
+                      <Lock className="w-4 h-4" />
+                    </InputGroupAddon>
                     <Input
                       {...field}
                       type={showPassword ? "text" : "password"}
                       id="password"
                       placeholder="*************"
-                      className="border-0 focus:h-8"
+                      className="flex-1 border-0 bg-transparent px-3 py-2 focus:outline-none focus-visible:ring-0"
                       aria-invalid={fieldState.invalid}
                     />
                     <InputGroupAddon align={"inline-end"}>
                       <InputGroupButton
-                        className="tabular-nums hover:bg-transparent cursor-pointer"
+                        className={cn(
+                          "p-2 cursor-pointer outline-none hover:bg-transparent",
+                          "group-focus-within:text-blue-600",
+                          "focus-visible:ring-2 focus-visible:ring-blue-500/40 rounded-md",
+                          "group-data-[invalid=true]:group-focus-within:text-red-600 focus-visible:group-data-[invalid=true]:ring-red-500/40"
+                        )}
                         type="button"
                         form="form-signin"
                         onClick={() => setShowPassword((prev) => !prev)}
