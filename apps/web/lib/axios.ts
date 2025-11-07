@@ -1,7 +1,8 @@
+import { env } from "@/config";
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_API_URL}/api`,
+  baseURL: `${env.api.next_public_api_url}/api`,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",
