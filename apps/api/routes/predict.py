@@ -15,7 +15,7 @@ class PredictRequest(BaseModel):
 	kehadiran_konseling: str
 
 
-@router.post("/")
+@router.post("")
 async def predict(data: PredictRequest):
 	result = predict_rehab(data.model_dump())
 	return result
